@@ -18,6 +18,6 @@ def minimax_alphabeta(board, depth, alpha, beta, maximizing_player):
         # Will include "beta = min(beta, value)".
 
     # Return column selected and value.
-        # Will need to have "minimax(...)[1]" for setting score in recursion, if using numpy matrix.
+        # Will need to have "minimax(...)[1]" for setting score in recursion.
 
     pass

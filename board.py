@@ -54,7 +54,44 @@ def print_board(board):
 
 # Function to check if current board has a win (four in a row) for a player.
 def is_win(board, token):
-    pass
+    is_match = False
+
+    # Check horizontal directions.
+    for row in range(ROWS):
+        for col in range(COLS - (WIN_LENGTH - 1)):
+
+            # TRYING TO GET THE CHECK FOR WIN WORKING FOR AN UNKNOWN WIN_LENGTH
+            if all(board.iat[row, col+i] == token for i in range(WIN_LENGTH)):
+                return True
+            else:
+                pass
+
+            # for i in range(WIN_LENGTH - 1):
+            #     if board.iat[row, col+i] == token:
+            #         is_match = False
+
+    # Check vertical directions.
+    for row in range(ROWS - (WIN_LENGTH - 1)):
+        for col in range(COLS):
+            for i in range(WIN_LENGTH - 1):
+                if not(board.iat[row+i, col] == token):
+                    is_match = False
+
+    # Check positive slopes.
+    for row in range((WIN_LENGTH - 1), ROWS):
+        for col in range(COLS - (WIN_LENGTH - 1)):
+            for i in range(WIN_LENGTH - 1):
+                if not(board.iat[row-i, col+i] == token):
+                    is_match = False
+
+    # Check negative slopes.
+    for row in range(ROWS - (WIN_LENGTH - 1)):
+        for col in range(COLS - (WIN_LENGTH - 1)):
+            for i in range(WIN_LENGTH - 1):
+                if not(board.iat[row+i, col+i] == token):
+                    is_match = False
+
+    return is_match    
 
 # Function to return the score of a board for a player.
     # This will be the heuristic we use to determine the value of node/board.
@@ -64,3 +101,19 @@ def score_board(board, token):
 # Function to check whether a board has a win or is full.
 def is_end_node(board):
     pass
+
+board = create_board_df()
+add_token(board, 4, PLAYER)
+# add_token(board, 3, AI)
+add_token(board, 3, PLAYER)
+# add_token(board, 2, AI)
+# add_token(board, 2, AI)
+add_token(board, 2, PLAYER)
+# add_token(board, 1, AI)
+# add_token(board, 1, AI)
+# add_token(board, 1, AI)
+add_token(board, 1, PLAYER)
+print(board)
+
+print(is_win(board, AI))
+print(is_win(board, PLAYER))
