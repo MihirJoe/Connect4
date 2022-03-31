@@ -54,66 +54,121 @@ def print_board(board):
 
 # Function to check if current board has a win (four in a row) for a player.
 def is_win(board, token):
-    is_match = False
-
     # Check horizontal directions.
     for row in range(ROWS):
         for col in range(COLS - (WIN_LENGTH - 1)):
-
             # TRYING TO GET THE CHECK FOR WIN WORKING FOR AN UNKNOWN WIN_LENGTH
             if all(board.iat[row, col+i] == token for i in range(WIN_LENGTH)):
                 return True
-            else:
-                pass
-
-            # for i in range(WIN_LENGTH - 1):
-            #     if board.iat[row, col+i] == token:
-            #         is_match = False
 
     # Check vertical directions.
     for row in range(ROWS - (WIN_LENGTH - 1)):
         for col in range(COLS):
-            for i in range(WIN_LENGTH - 1):
-                if not(board.iat[row+i, col] == token):
-                    is_match = False
+            if all(board.iat[row+i, col] == token for i in range(WIN_LENGTH)):
+                return True
 
     # Check positive slopes.
     for row in range((WIN_LENGTH - 1), ROWS):
         for col in range(COLS - (WIN_LENGTH - 1)):
-            for i in range(WIN_LENGTH - 1):
-                if not(board.iat[row-i, col+i] == token):
-                    is_match = False
+            if all(board.iat[row-i,col+i] == token for i in range(WIN_LENGTH)):
+                return True
+
 
     # Check negative slopes.
     for row in range(ROWS - (WIN_LENGTH - 1)):
         for col in range(COLS - (WIN_LENGTH - 1)):
-            for i in range(WIN_LENGTH - 1):
-                if not(board.iat[row+i, col+i] == token):
-                    is_match = False
+            if all(board.iat[row+i, col+i] == token for i in range(WIN_LENGTH)):
+                return True
 
-    return is_match    
+    return False
+
+# NOT PROPERLY SUBTRACTING OPP SCORES. THIS ISN'T WORKING!
+def score_line(line, token):
+    score = 0
+    oppToken = PLAYER
+    if token == PLAYER: oppToken = AI
+
+    # Extra points for having tokens in center column?
+    # Primary has 4 tokens: 1000
+    if line.count(token) == 4:
+        score += 1000
+    
+    # Primary has 3 tokens and 1 open space: 20
+    elif line.count(token) == 3 and line.count(EMPTY) == 1:
+        score += 20
+
+    # Primary has 2 tokens and 2 open spaces: 5
+    elif line.count(token) == 2 and line.count(EMPTY) ==2:
+        score += 5
+
+    # Opponent has 4 tokens: -1000
+    if line.count(oppToken) == 4:
+        score -= 1000
+
+    # Opponent has 3 tokens and 1 open space: -20
+    elif line.count(oppToken) == 3 and line.count(EMPTY) == 1:
+        score -= 20
+
+    # Opponent has 2 tokens and 2 open spaces: -5
+    elif line.count(oppToken) == 2 and line.count(EMPTY) ==2:
+        print(line.count(oppToken))
+        score -= 5
+        print(score)
+
+    return score
 
 # Function to return the score of a board for a player.
     # This will be the heuristic we use to determine the value of node/board.
 def score_board(board, token):
-    pass
+    score = 0
+
+    # Score horizontals.
+    for row in range(ROWS):
+        rowLine = list(board.iloc[row, :])
+        for col in range(COLS - (WIN_LENGTH - 3)):
+            lineSection = rowLine[col: col + WIN_LENGTH]
+            score += score_line(lineSection, token)
+
+    # Score verticals.
+    for col in range(COLS):
+        colLine = list(board.iloc[:, col])
+        for row in range(ROWS - (WIN_LENGTH - 1)):
+            lineSection = colLine[row: row + WIN_LENGTH]
+            score += score_line(lineSection, token)
+
+    # Score positive diagonals.
+    for row in range(ROWS - (WIN_LENGTH - 1)):
+        for col in range(COLS - (WIN_LENGTH - 1)):
+            lineSection = list(board.iloc[row+i, col+i] for i in range(WIN_LENGTH))
+            score += score_line(lineSection, token)
+
+    # Score negative diagonals.
+    for row in range(ROWS - (WIN_LENGTH - 1)):
+        for col in range(COLS - (WIN_LENGTH - 1)):
+            lineSection = list(board.iloc[row+(WIN_LENGTH - 1)-i, col+i] for i in range(WIN_LENGTH))
+            score += score_line(lineSection, token)
+
+    return score
 
 # Function to check whether a board has a win or is full.
 def is_end_node(board):
-    pass
+    return is_win(board, AI) or is_win(board, PLAYER) or (len(all_valid_columns(board)) == 0)
 
 board = create_board_df()
 add_token(board, 4, PLAYER)
-# add_token(board, 3, AI)
-add_token(board, 3, PLAYER)
-# add_token(board, 2, AI)
-# add_token(board, 2, AI)
+#add_token(board, 3, AI)
+#add_token(board, 3, PLAYER)
+#add_token(board, 2, AI)
+#add_token(board, 2, AI)
 add_token(board, 2, PLAYER)
-# add_token(board, 1, AI)
-# add_token(board, 1, AI)
-# add_token(board, 1, AI)
-add_token(board, 1, PLAYER)
+add_token(board, 1, AI)
+add_token(board, 1, AI)
+add_token(board, 1, AI)
+#add_token(board, 1, AI)
 print(board)
 
 print(is_win(board, AI))
 print(is_win(board, PLAYER))
+
+print(score_board(board, AI))
+print(score_board(board, PLAYER))
