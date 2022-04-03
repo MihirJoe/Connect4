@@ -24,13 +24,15 @@ AI_TURN = 1
 
 def get_depth():
     depth = input("Choose difficulty between 1 and 5: ")
-    if not(depth.isdigit):
+    print(not(depth.isdigit()))
+    if not(depth.isdigit()):
         print("Difficulty selection must be integer. Pick again.")
         return get_depth()
 
     depth = int(depth)
     if depth > 5 or depth < 1:
         print("Difficulty selection must be between 1 and 5. Pick again.")
+        return get_depth()
     
     return depth
 
@@ -61,6 +63,7 @@ def AI_turn(board, depth):
     return is_win(board, AI)
 
 board = create_board_df()
+print(board)
 depth = get_depth()
 turn = random.randint(PLAYER_TURN, AI_TURN)
 gameOver = False
@@ -69,10 +72,11 @@ gameOver = False
     # Add option for player to decide whether to start a new game?
 
 # Console version of game.
+# ONE SCENARIO AT LEVEL 4 WHERE AI COULD HAVE MADE WINNING MOVE BUT DID NOT.
 while not gameOver:
     if turn is PLAYER_TURN:
         gameOver = player_turn(board)
-        print_board(board)
+        print(board)
         if gameOver:
             print("PLAYER WINS!")
             break
@@ -80,7 +84,7 @@ while not gameOver:
         turn = turn % 2
     else:
         gameOver = AI_turn(board, depth)
-        print_board(board)
+        print(board)
         if gameOver:
             print("AI WINS!")
             break

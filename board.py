@@ -90,30 +90,42 @@ def score_line(line, token):
     oppToken = PLAYER
     if token == PLAYER: oppToken = AI
 
+    if line.count(token) == WIN_LENGTH:
+        return 9999999
+    if line.count(oppToken) == WIN_LENGTH:
+        return -9999999
+    
+    # Line scoring method for multiple WIN_LENGTH possibilities.
+    for i in range(1, WIN_LENGTH):
+        if line.count(token) == i and line.count(EMPTY) == (WIN_LENGTH - i):
+            score += 2*i*i
+        if line.count(oppToken) == i and line.count(EMPTY) == (WIN_LENGTH - i):
+            score -= 2*i*i
+
     # Extra points for having tokens in center column?
     # Primary has WIN_LENGTH tokens: 1000
-    if line.count(token) == WIN_LENGTH:
-        score += 1000
+    # if line.count(token) == WIN_LENGTH:
+    #     score += 1000
     
-    # Primary has 1 less than WIN_LENGTH tokens and 1 open space: 20
-    elif line.count(token) == (WIN_LENGTH - 1) and line.count(EMPTY) == 1:
-        score += 20
+    # # Primary has 1 less than WIN_LENGTH tokens and 1 open space: 20
+    # elif line.count(token) == (WIN_LENGTH - 1) and line.count(EMPTY) == 1:
+    #     score += 20
 
-    # Primary has 2 less than WIN_LENGTH tokens and 2 open spaces: 5
-    elif line.count(token) == (WIN_LENGTH - 2) and line.count(EMPTY) == 2:
-        score += 5
+    # # Primary has 2 less than WIN_LENGTH tokens and 2 open spaces: 5
+    # elif line.count(token) == (WIN_LENGTH - 2) and line.count(EMPTY) == 2:
+    #     score += 5
 
-    # Opponent has WIN_LENGTH tokens: -1000
-    if line.count(oppToken) == WIN_LENGTH:
-        score -= 1000
+    # # Opponent has WIN_LENGTH tokens: -1000
+    # if line.count(oppToken) == WIN_LENGTH:
+    #     score -= 1000
 
-    # Opponent has 1 less than WIN_LENGTH tokens and 1 open space: -20
-    elif line.count(oppToken) == (WIN_LENGTH - 1) and line.count(EMPTY) == 1:
-        score -= 20
+    # # Opponent has 1 less than WIN_LENGTH tokens and 1 open space: -20
+    # elif line.count(oppToken) == (WIN_LENGTH - 1) and line.count(EMPTY) == 1:
+    #     score -= 20
 
-    # Opponent has 2 less than WIN_LENGTH tokens and 2 open spaces: -5
-    elif line.count(oppToken) == (WIN_LENGTH - 2) and line.count(EMPTY) == 2:
-        score -= 5
+    # # Opponent has 2 less than WIN_LENGTH tokens and 2 open spaces: -5
+    # elif line.count(oppToken) == (WIN_LENGTH - 2) and line.count(EMPTY) == 2:
+    #     score -= 5
 
     return score
 
@@ -125,7 +137,7 @@ def score_board(board, token):
     # Score horizontals.
     for row in range(ROWS):
         rowLine = list(board.iloc[row, :])
-        for col in range(COLS - (WIN_LENGTH - 3)):
+        for col in range(COLS - (WIN_LENGTH - 1)):
             lineSection = rowLine[col: col + WIN_LENGTH]
             score += score_line(lineSection, token)
 
@@ -156,18 +168,20 @@ def is_end_node(board):
 
 # board = create_board_df()
 # add_token(board, 4, PLAYER)
-# #add_token(board, 3, AI)
-# #add_token(board, 3, PLAYER)
-# #add_token(board, 2, AI)
+# # #add_token(board, 3, AI)
+# add_token(board, 3, PLAYER)
+# add_token(board, 2, AI)
 # add_token(board, 2, PLAYER)
-# add_token(board, 2, PLAYER)
+# # add_token(board, 2, PLAYER)
 # add_token(board, 1, AI)
 # add_token(board, 1, AI)
 # add_token(board, 1, AI)
-# #add_token(board, 1, AI)
+# # #add_token(board, 1, AI)
 # print(board)
 
-# print(is_win(board, AI))
+# # print(is_win(board, AI))
 # print(is_win(board, PLAYER))
 
-# print(score_board(board, AI))
+# print(score_board(board, PLAYER))
+
+
