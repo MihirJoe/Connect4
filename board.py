@@ -166,22 +166,5 @@ def score_board(board, token):
 def is_end_node(board):
     return is_win(board, AI) or is_win(board, PLAYER) or (len(all_valid_columns(board)) == 0)
 
-# board = create_board_df()
-# add_token(board, 4, PLAYER)
-# # #add_token(board, 3, AI)
-# add_token(board, 3, PLAYER)
-# add_token(board, 2, AI)
-# add_token(board, 2, PLAYER)
-# # add_token(board, 2, PLAYER)
-# add_token(board, 1, AI)
-# add_token(board, 1, AI)
-# add_token(board, 1, AI)
-# # #add_token(board, 1, AI)
-# print(board)
-
-# # print(is_win(board, AI))
-# print(is_win(board, PLAYER))
-
-# print(score_board(board, PLAYER))
 
 
