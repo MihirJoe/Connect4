@@ -96,36 +96,12 @@ def score_line(line, token):
         return -9999999
     
     # Line scoring method for multiple WIN_LENGTH possibilities.
-    for i in range(1, WIN_LENGTH):
+    for i in range(2, WIN_LENGTH):
         if line.count(token) == i and line.count(EMPTY) == (WIN_LENGTH - i):
             score += 2*i*i
-        if line.count(oppToken) == i and line.count(EMPTY) == (WIN_LENGTH - i):
-            score -= 2*i*i
 
-    # Extra points for having tokens in center column?
-    # Primary has WIN_LENGTH tokens: 1000
-    # if line.count(token) == WIN_LENGTH:
-    #     score += 1000
-    
-    # # Primary has 1 less than WIN_LENGTH tokens and 1 open space: 20
-    # elif line.count(token) == (WIN_LENGTH - 1) and line.count(EMPTY) == 1:
-    #     score += 20
-
-    # # Primary has 2 less than WIN_LENGTH tokens and 2 open spaces: 5
-    # elif line.count(token) == (WIN_LENGTH - 2) and line.count(EMPTY) == 2:
-    #     score += 5
-
-    # # Opponent has WIN_LENGTH tokens: -1000
-    # if line.count(oppToken) == WIN_LENGTH:
-    #     score -= 1000
-
-    # # Opponent has 1 less than WIN_LENGTH tokens and 1 open space: -20
-    # elif line.count(oppToken) == (WIN_LENGTH - 1) and line.count(EMPTY) == 1:
-    #     score -= 20
-
-    # # Opponent has 2 less than WIN_LENGTH tokens and 2 open spaces: -5
-    # elif line.count(oppToken) == (WIN_LENGTH - 2) and line.count(EMPTY) == 2:
-    #     score -= 5
+    if line.count(oppToken) == (WIN_LENGTH - 1) and line.count(EMPTY) == 1:
+        score -= 18
 
     return score
 
@@ -133,6 +109,10 @@ def score_line(line, token):
     # This will be the heuristic we use to determine the value of node/board.
 def score_board(board, token):
     score = 0
+
+    # Extra score for center column?
+    centerCol = list(board.iloc[:, int((COLS - 1)/2)])
+    score += 3 * centerCol.count(token)
 
     # Score horizontals.
     for row in range(ROWS):
@@ -165,6 +145,5 @@ def score_board(board, token):
 # Function to check whether a board has a win or is full.
 def is_end_node(board):
     return is_win(board, AI) or is_win(board, PLAYER) or (len(all_valid_columns(board)) == 0)
-
 
 

@@ -11,17 +11,14 @@ def minimax_alphabeta(board, depth, alpha, beta, maximizingPlayer):
     # Setup to leave recursion if at depth limit or if the board contains a win.
     valid_columns = all_valid_columns(board)
     if depth == 0:
-        print("End of depth.")
+        print("Depth Reached. Current Board Score: ", score_board(board, AI))
         return None, score_board(board, AI)
     if is_end_node(board):
         if is_win(board, AI):
-            print("AI Will Win.")
             return None, 9999999
         if is_win(board, PLAYER):
-            print("Player Will Win.")
             return None, -9999999
         else:
-            print("No one wins.")
             return None, 0
     
     # Maximizing player section.
@@ -37,14 +34,13 @@ def minimax_alphabeta(board, depth, alpha, beta, maximizingPlayer):
             boardCopy = board.copy()
             add_token(boardCopy, col, AI)
             newScore = minimax_alphabeta(boardCopy, depth - 1, alpha, beta, False)[1]
-            print("New Score Maximizer: ", newScore)
+            print("Maximizing. Column: ", col, ". Score: ", newScore)
             if newScore > bestScore:
                 bestScore = newScore
                 column = col
             alpha = max(alpha, bestScore)
             if alpha >= beta:
                 break
-        print("Column Choice Maximizer: ", column)
         return column, bestScore
 
     # Minimizing player section.
@@ -60,41 +56,65 @@ def minimax_alphabeta(board, depth, alpha, beta, maximizingPlayer):
             boardCopy = board.copy()
             add_token(boardCopy, col, PLAYER)
             newScore = minimax_alphabeta(boardCopy, depth - 1, alpha, beta, True)[1]
-            print("New Score Minimizer: ", newScore)
+            print("Minimizing. Column: ", col, ". Score: ", newScore)
             if newScore < bestScore:
                 bestScore = newScore
                 column = col
             beta = min(beta, bestScore)
             if alpha >= beta:
                 break
-        print("Column Choice Minimizer: ", column)
         return column, bestScore
 
 
+# Testing.
+
 board = create_board_df()
-add_token(board,0,PLAYER)
-add_token(board,0,PLAYER)
-add_token(board,0,AI)
+add_token(board,3,PLAYER)
 add_token(board,1,AI)
-add_token(board,1,PLAYER)
 add_token(board,2,PLAYER)
 add_token(board,2,AI)
-add_token(board,3,PLAYER)
-add_token(board,3,PLAYER)
+add_token(board,4,PLAYER)
+add_token(board,5,AI)
+add_token(board,2,PLAYER)
 add_token(board,3,AI)
+add_token(board,1,PLAYER)
+add_token(board,4,AI)
+add_token(board,5,PLAYER)
+add_token(board,3,AI)
+add_token(board,2,PLAYER)
 add_token(board,4,AI)
 add_token(board,4,PLAYER)
-add_token(board,4,AI)
+add_token(board,3,AI)
+add_token(board,3,PLAYER)
+add_token(board,5,AI)
+add_token(board,1,PLAYER)
+add_token(board,2,AI)
+add_token(board,5,PLAYER)
+add_token(board,3,AI)
+add_token(board,2,PLAYER)
+add_token(board,1,AI)
+add_token(board,6,PLAYER)
+add_token(board,1,AI)
+add_token(board,1,PLAYER)
 add_token(board,5,AI)
 add_token(board,5,PLAYER)
-add_token(board,5,PLAYER)
-add_token(board,5,PLAYER)
-add_token(board,5,AI)
+add_token(board,6,AI)
+add_token(board,6,PLAYER)
+add_token(board,6,AI)
+add_token(board,6,PLAYER)
+add_token(board,6,AI)
+add_token(board,0,PLAYER)
+add_token(board,0,AI)
+add_token(board,0,PLAYER)
+add_token(board,0,AI)
+add_token(board,0,PLAYER)
+add_token(board,0,AI)
+add_token(board,4,PLAYER)
 
 
 print(board)
 
-colSelection, score = minimax_alphabeta(board, 1, -math.inf, math.inf, True)
+colSelection, score = minimax_alphabeta(board, 4, -math.inf, math.inf, True)
 print(type(colSelection))
 
 if is_valid_column(board, colSelection):

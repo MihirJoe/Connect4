@@ -70,9 +70,9 @@ gameOver = False
 
 # While loop that will continue until game is over.
     # Add option for player to decide whether to start a new game?
+    # How do we make AI play each other?
 
 # Console version of game.
-# ONE SCENARIO AT LEVEL 4 WHERE AI COULD HAVE MADE WINNING MOVE BUT DID NOT.
 while not gameOver:
     if turn is PLAYER_TURN:
         gameOver = player_turn(board)
