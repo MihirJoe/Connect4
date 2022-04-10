@@ -55,7 +55,8 @@ def player_turn(board):
     return is_win(board, PLAYER)
 
 def AI_turn(board, depth):
-    colSelection, score = minimax_alphabeta(board, depth, -math.inf, math.inf, True)
+    moveCount = 0
+    colSelection, score = minimax_alphabeta(board, moveCount, depth, -math.inf, math.inf, True)
 
     if is_valid_column(board, colSelection):
         add_token(board, colSelection, AI)

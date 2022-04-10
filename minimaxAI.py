@@ -7,17 +7,19 @@ from board import *
     # Compare these methods to minimax with alpha-beta.
 
 # NEED TO TEST THIS ON SIMPLER THINGS!! I THINK I NEED TO UPDATE THE  SCORE FUNCTION.
-def minimax_alphabeta(board, depth, alpha, beta, maximizingPlayer):
-    # Setup to leave recursion if at depth limit or if the board contains a win.
+def minimax_alphabeta(board, moveCount, depth, alpha, beta, maximizingPlayer):
     valid_columns = all_valid_columns(board)
+    random.shuffle(valid_columns)
+
+    # Setup to leave recursion if at depth limit or if the board contains a win.
     if depth == 0:
-        print("Depth Reached. Current Board Score: ", score_board(board, AI))
+        print("Depth Reached. Current Board Score: ", score_board(board, AI), ". Number Moves: ", moveCount)
         return None, score_board(board, AI)
     if is_end_node(board):
         if is_win(board, AI):
-            return None, 9999999
+            return None, 9999999 - moveCount
         if is_win(board, PLAYER):
-            return None, -9999999
+            return None, -9999999 + moveCount
         else:
             return None, 0
     
@@ -29,11 +31,10 @@ def minimax_alphabeta(board, depth, alpha, beta, maximizingPlayer):
         # Will include "alpha = max(alpha, value)" where value is the value/utilitiy of the board/node.
     if maximizingPlayer:
         bestScore = -math.inf
-        #column = random.choice(valid_columns)
         for col in valid_columns:
             boardCopy = board.copy()
             add_token(boardCopy, col, AI)
-            newScore = minimax_alphabeta(boardCopy, depth - 1, alpha, beta, False)[1]
+            newScore = minimax_alphabeta(boardCopy, moveCount + 1, depth - 1, alpha, beta, False)[1]
             print("Maximizing. Column: ", col, ". Score: ", newScore)
             if newScore > bestScore:
                 bestScore = newScore
@@ -51,11 +52,10 @@ def minimax_alphabeta(board, depth, alpha, beta, maximizingPlayer):
         # Will include "beta = min(beta, value)".
     else:
         bestScore = math.inf
-        #column = random.choice(valid_columns)
         for col in valid_columns:
             boardCopy = board.copy()
             add_token(boardCopy, col, PLAYER)
-            newScore = minimax_alphabeta(boardCopy, depth - 1, alpha, beta, True)[1]
+            newScore = minimax_alphabeta(boardCopy, moveCount + 1, depth - 1, alpha, beta, True)[1]
             print("Minimizing. Column: ", col, ". Score: ", newScore)
             if newScore < bestScore:
                 bestScore = newScore
@@ -69,53 +69,23 @@ def minimax_alphabeta(board, depth, alpha, beta, maximizingPlayer):
 # Testing.
 
 board = create_board_df()
-add_token(board,3,PLAYER)
-add_token(board,1,AI)
-add_token(board,2,PLAYER)
-add_token(board,2,AI)
-add_token(board,4,PLAYER)
-add_token(board,5,AI)
-add_token(board,2,PLAYER)
-add_token(board,3,AI)
-add_token(board,1,PLAYER)
-add_token(board,4,AI)
-add_token(board,5,PLAYER)
 add_token(board,3,AI)
 add_token(board,2,PLAYER)
-add_token(board,4,AI)
-add_token(board,4,PLAYER)
 add_token(board,3,AI)
 add_token(board,3,PLAYER)
-add_token(board,5,AI)
-add_token(board,1,PLAYER)
-add_token(board,2,AI)
-add_token(board,5,PLAYER)
-add_token(board,3,AI)
+add_token(board,4,AI)
 add_token(board,2,PLAYER)
-add_token(board,1,AI)
-add_token(board,6,PLAYER)
+add_token(board,5,AI)
+add_token(board,1,PLAYER)
 add_token(board,1,AI)
 add_token(board,1,PLAYER)
-add_token(board,5,AI)
-add_token(board,5,PLAYER)
-add_token(board,6,AI)
-add_token(board,6,PLAYER)
-add_token(board,6,AI)
-add_token(board,6,PLAYER)
-add_token(board,6,AI)
-add_token(board,0,PLAYER)
-add_token(board,0,AI)
-add_token(board,0,PLAYER)
-add_token(board,0,AI)
-add_token(board,0,PLAYER)
-add_token(board,0,AI)
+add_token(board,4,AI)
 add_token(board,4,PLAYER)
 
+moveCount = 0
 
 print(board)
-
-colSelection, score = minimax_alphabeta(board, 4, -math.inf, math.inf, True)
-print(type(colSelection))
+colSelection, score = minimax_alphabeta(board, moveCount, 4, -math.inf, math.inf, True)
 
 if is_valid_column(board, colSelection):
     add_token(board, colSelection, AI)

@@ -91,9 +91,9 @@ def score_line(line, token):
     if token == PLAYER: oppToken = AI
 
     if line.count(token) == WIN_LENGTH:
-        return 9999999
+        return 1000
     if line.count(oppToken) == WIN_LENGTH:
-        return -9999999
+        return -1000
     
     # Line scoring method for multiple WIN_LENGTH possibilities.
     for i in range(2, WIN_LENGTH):
