@@ -147,7 +147,7 @@ while not gameOver:
         AI_turn(board, depth)
         if is_win(board, AI):
             #print("AI WINS!")
-            label = font.render("Player Wins!", 1, 'red')
+            label = font.render("AI Wins!", 1, 'red')
             screen.blit(label, (40,10))
             gameOver = True
 
