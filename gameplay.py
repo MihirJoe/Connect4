@@ -18,10 +18,10 @@ AI = 2
 PLAYER_TURN = 0
 AI_TURN = 1
 
-SQUARE = 100
-RADIUS = int(SQUARE/2 - 5)
-SCREEN_WIDTH = COLS * SQUARE
-SCREEN_HEIGHT = (ROWS + 1) * SQUARE
+SQUARE_SIDE = 100
+RADIUS = int(SQUARE_SIDE/2 - 5)
+SCREEN_WIDTH = COLS * SQUARE_SIDE
+SCREEN_HEIGHT = (ROWS + 1) * SQUARE_SIDE
 
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
@@ -65,7 +65,7 @@ def player_turn_console(board):
 
 def player_turn_pygame(board):
     positionX = event.pos[0]
-    colSelection = int(math.floor(positionX/SQUARE))
+    colSelection = int(math.floor(positionX/SQUARE_SIDE))
     
     if is_valid_column(board, colSelection):
         add_token(board, colSelection, PLAYER)
@@ -84,15 +84,15 @@ def AI_turn(board, depth):
 def print_pygame_board(board):
     for row in range(ROWS):
         for col in range(COLS):
-            pygame.draw.rect(screen, 'blue', (col*SQUARE, row*SQUARE + SQUARE, SQUARE, SQUARE))
-            pygame.draw.circle(screen, 'black', (int(col*SQUARE + SQUARE/2), int(row*SQUARE + SQUARE + SQUARE/2)), RADIUS)
+            pygame.draw.rect(screen, 'blue', (col*SQUARE_SIDE, row*SQUARE_SIDE + SQUARE_SIDE, SQUARE_SIDE, SQUARE_SIDE))
+            pygame.draw.circle(screen, 'black', (int(col*SQUARE_SIDE + SQUARE_SIDE/2), int(row*SQUARE_SIDE + SQUARE_SIDE + SQUARE_SIDE/2)), RADIUS)
 
     for row in range(ROWS):
         for col in range(COLS):
             if board.iat[row, col] == 1:
-                pygame.draw.circle(screen, 'red', (int(col*SQUARE + SQUARE/2), int(row*SQUARE + SQUARE + SQUARE/2)), RADIUS)
+                pygame.draw.circle(screen, 'red', (int(col*SQUARE_SIDE + SQUARE_SIDE/2), int(row*SQUARE_SIDE + SQUARE_SIDE + SQUARE_SIDE/2)), RADIUS)
             elif board.iat[row, col] == 2:
-                pygame.draw.circle(screen, 'yellow', (int(col*SQUARE + SQUARE/2), int(row*SQUARE + SQUARE + SQUARE/2)), RADIUS)
+                pygame.draw.circle(screen, 'yellow', (int(col*SQUARE_SIDE + SQUARE_SIDE/2), int(row*SQUARE_SIDE + SQUARE_SIDE + SQUARE_SIDE/2)), RADIUS)
     
     pygame.display.update()
 
@@ -115,16 +115,18 @@ while not gameOver:
             sys.exit()
 
         if event.type ==  pygame.MOUSEMOTION:
-            pygame.draw.rect(screen, 'black', (0,0,SCREEN_WIDTH,SQUARE))
+            # Covers top row with black rectangle.
+            pygame.draw.rect(screen, 'black', (0,0,SCREEN_WIDTH,SQUARE_SIDE))
             positionX = event.pos[0]
             if turn == PLAYER_TURN:
-                pygame.draw.circle(screen, 'red', (positionX, int(SQUARE/2)), RADIUS)
-            else:
-                pygame.draw.circle(screen, 'yellow', (positionX, int(SQUARE/2)), RADIUS)
+                # Updates location of Player circle each time the mouse is moved along the top row.
+                pygame.draw.circle(screen, 'red', (positionX, int(SQUARE_SIDE/2)), RADIUS)
+            
         pygame.display.update()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            pygame.draw.rect(screen, 'black', (0,0,SCREEN_WIDTH,SQUARE))
+            # Covers top row with black rectangle.
+            pygame.draw.rect(screen, 'black', (0, 0, SCREEN_WIDTH, SQUARE_SIDE))
             
             if turn == PLAYER_TURN:
                 player_turn_pygame(board)
