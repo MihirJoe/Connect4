@@ -67,27 +67,3 @@ def minimax_alphabeta(board, moveCount, depth, alpha, beta, maximizingPlayer):
 
 
 # Testing.
-
-board = create_board_df()
-add_token(board,3,AI)
-add_token(board,2,PLAYER)
-add_token(board,3,AI)
-add_token(board,3,PLAYER)
-add_token(board,4,AI)
-add_token(board,2,PLAYER)
-add_token(board,5,AI)
-add_token(board,1,PLAYER)
-add_token(board,1,AI)
-add_token(board,1,PLAYER)
-add_token(board,4,AI)
-add_token(board,4,PLAYER)
-
-moveCount = 0
-
-print(board)
-colSelection, score = minimax_alphabeta(board, moveCount, 4, -math.inf, math.inf, True)
-
-if is_valid_column(board, colSelection):
-    add_token(board, colSelection, AI)
-
-print(board)

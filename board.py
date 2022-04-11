@@ -48,10 +48,6 @@ def all_valid_columns(board):
 
     return valid_columns
 
-# Function to print the board, depending on choice for setup.
-def print_board(board):
-    pass
-
 # Check if current board has a win (WIN_LENGTH consecutive tokens) for a given token.
 def is_win(board, token):
     # Check horizontal directions.
@@ -145,5 +141,4 @@ def score_board(board, token):
 # Function to check whether a board has a win or is full.
 def is_end_node(board):
     return is_win(board, AI) or is_win(board, PLAYER) or (len(all_valid_columns(board)) == 0)
-
 
