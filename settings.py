@@ -1,0 +1,18 @@
+def init():
+    ROWS = 6
+    COLS = 7
+    WIN_LENGTH = 4
+
+    EMPTY = 0
+    PLAYER = 1
+    AI = 2
+
+    PLAYER_TURN = 0
+    AI_TURN = 1
+
+    SQUARE_SIDE = 100
+    RADIUS = int(SQUARE_SIDE/2 - 5)
+    SCREEN_WIDTH = COLS * SQUARE_SIDE
+    SCREEN_HEIGHT = (ROWS + 1) * SQUARE_SIDE
+
+    SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
