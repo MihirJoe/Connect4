@@ -1,18 +1,8 @@
 import numpy as np
 import pandas as pd
-import time
 import settings
-import subfile
 
-TOP_ROW = 0
-
-# Creates board as numpy matrix.
-def create_board_matrix():
-    board = np.zeros(settings.ROWS, settings.COLS)
-
-# Create board as bitmap??
-def create_board_bitmap():
-    pass
+TOP_ROW = 0 # initialize TOP_ROW to 0, will remain constant
 
 # Create board as pandas dataframe.
 def create_board_df():
