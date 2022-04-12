@@ -31,18 +31,64 @@ SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
     # Get the number of rows and columns from the user? Or will we manually set those.
     # Randomize the initial starter.
 
-def get_depth():
+def get_depth_console():
     depth = input("Choose difficulty between 1 and 5: ")
     print(not(depth.isdigit()))
     if not(depth.isdigit()):
         print("Difficulty selection must be integer. Pick again.")
-        return get_depth()
+        return get_depth_console()
 
     depth = int(depth)
     if depth > 5 or depth < 1:
         print("Difficulty selection must be between 1 and 5. Pick again.")
-        return get_depth()
+        return get_depth_console()
     
+    return depth
+
+def get_depth_pygame():
+    instruct1 = smallFont.render("Select difficulty level using your keyboard.", 1, 'white')
+    instruct2 = smallFont.render("Must be between 1 (easiest) and 5 (hardest).", 1, 'white')
+    screen.blit(instruct1, (40,10))
+    screen.blit(instruct2, (40, 50))
+    pygame.display.update()
+
+    remind = smallFont.render("Difficulty must be between 1 and 5. Choose again.", 1, 'blue')
+    
+    needDepth = True
+
+    while needDepth:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                needDepth = False
+                if event.key == pygame.K_1:
+                    depth = 1
+                    decision = smallFont.render("You selected difficulty level 1. Enjoy the game!", 1, 'white')
+                    screen.blit(decision, (40,150))
+                elif event.key == pygame.K_2:
+                    depth = 2
+                    decision = smallFont.render("You selected difficulty level 2. Enjoy the game!", 1, 'white')
+                    screen.blit(decision, (40,150))
+                elif event.key == pygame.K_3:
+                    depth = 3
+                    decision = smallFont.render("You selected difficulty level 3. Enjoy the game!", 1, 'white')
+                    screen.blit(decision, (40,150))
+                elif event.key == pygame.K_4:
+                    depth = 4
+                    decision = smallFont.render("You selected difficulty level 4. Enjoy the game!", 1, 'white')
+                    screen.blit(decision, (40,150))
+                elif event.key == pygame.K_5:
+                    depth = 5
+                    decision = smallFont.render("You selected difficulty level 5. Enjoy the game!", 1, 'white')
+                    screen.blit(decision, (40,150))
+                else:
+                    needDepth = True
+                    screen.blit(remind, (40,100))
+        pygame.display.update()
+
+    pygame.time.wait(3000)
     return depth
 
 def player_turn_console(board):
@@ -81,7 +127,7 @@ def AI_turn(board, depth):
 
     return
 
-def print_pygame_board(board):
+def print_pygame_board(board):    
     for row in range(ROWS):
         for col in range(COLS):
             pygame.draw.rect(screen, 'blue', (col*SQUARE_SIDE, row*SQUARE_SIDE + SQUARE_SIDE, SQUARE_SIDE, SQUARE_SIDE))
@@ -97,18 +143,22 @@ def print_pygame_board(board):
     pygame.display.update()
 
 board = create_board_df()
-depth = get_depth()
+# depth = get_depth_console()
 turn = random.randint(PLAYER_TURN, AI_TURN)
 gameOver = False
 
 pygame.init()
 screen = pygame.display.set_mode(SCREEN_SIZE)
-font = pygame.font.SysFont("monospace", 75)
+bigFont = pygame.font.SysFont("arial", 75)
+smallFont = pygame.font.SysFont("arial", 35)
+
+depth = get_depth_pygame()
+
 print_pygame_board(board)
 pygame.display.update()
 
+
 # Pygame version of game.
-# DROPPING COINS UPSIDE DOWN
 while not gameOver:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -134,7 +184,7 @@ while not gameOver:
                 # print(board)
                 if is_win(board, PLAYER):
                     # print("PLAYER WINS!")
-                    label = font.render("Player Wins!", 1, 'red')
+                    label = bigFont.render("Player Wins!", 1, 'red')
                     screen.blit(label, (40,10))
                     gameOver = True
 
@@ -147,7 +197,7 @@ while not gameOver:
         AI_turn(board, depth)
         if is_win(board, AI):
             #print("AI WINS!")
-            label = font.render("AI Wins!", 1, 'red')
+            label = bigFont.render("AI Wins!", 1, 'red')
             screen.blit(label, (40,10))
             gameOver = True
 
