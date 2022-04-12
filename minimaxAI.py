@@ -14,7 +14,7 @@ def minimax_alphabeta(board, moveCount, depth, alpha, beta, maximizingPlayer):
 
     # Setup to leave recursion if at depth limit or if the board contains a win.
     if depth == 0:
-        print("Depth Reached. Current Board Score: ", score_board(board, settings.AI), ". Number Moves: ", moveCount)
+        #print("Depth Reached. Current Board Score: ", score_board(board, settings.AI), ". Number Moves: ", moveCount)
         return None, score_board(board, settings.AI)
     if is_end_node(board):
         if is_win(board, settings.AI):
@@ -36,7 +36,7 @@ def minimax_alphabeta(board, moveCount, depth, alpha, beta, maximizingPlayer):
             boardCopy = board.copy()
             add_token(boardCopy, col, settings.AI)
             newScore = minimax_alphabeta(boardCopy, moveCount + 1, depth - 1, alpha, beta, False)[1]
-            print("Maximizing. Column: ", col, ". Score: ", newScore)
+            #print("Maximizing. Column: ", col, ". Score: ", newScore)
             if newScore > bestScore:
                 bestScore = newScore
                 column = col
@@ -57,7 +57,7 @@ def minimax_alphabeta(board, moveCount, depth, alpha, beta, maximizingPlayer):
             boardCopy = board.copy()
             add_token(boardCopy, col, settings.PLAYER)
             newScore = minimax_alphabeta(boardCopy, moveCount + 1, depth - 1, alpha, beta, True)[1]
-            print("Minimizing. Column: ", col, ". Score: ", newScore)
+            #print("Minimizing. Column: ", col, ". Score: ", newScore)
             if newScore < bestScore:
                 bestScore = newScore
                 column = col
