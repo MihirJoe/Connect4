@@ -2,6 +2,7 @@ import numpy as np
 import math
 import random
 from board import *
+import settings
 
 # Create non-minimax methods for AI decision making? 
     # Compare these methods to minimax with alpha-beta.
@@ -13,12 +14,12 @@ def minimax_alphabeta(board, moveCount, depth, alpha, beta, maximizingPlayer):
 
     # Setup to leave recursion if at depth limit or if the board contains a win.
     if depth == 0:
-        print("Depth Reached. Current Board Score: ", score_board(board, AI), ". Number Moves: ", moveCount)
-        return None, score_board(board, AI)
+        print("Depth Reached. Current Board Score: ", score_board(board, settings.AI), ". Number Moves: ", moveCount)
+        return None, score_board(board, settings.AI)
     if is_end_node(board):
-        if is_win(board, AI):
+        if is_win(board, settings.AI):
             return None, 9999999 - moveCount
-        if is_win(board, PLAYER):
+        if is_win(board, settings.PLAYER):
             return None, -9999999 + moveCount
         else:
             return None, 0
@@ -33,7 +34,7 @@ def minimax_alphabeta(board, moveCount, depth, alpha, beta, maximizingPlayer):
         bestScore = -math.inf
         for col in valid_columns:
             boardCopy = board.copy()
-            add_token(boardCopy, col, AI)
+            add_token(boardCopy, col, settings.AI)
             newScore = minimax_alphabeta(boardCopy, moveCount + 1, depth - 1, alpha, beta, False)[1]
             print("Maximizing. Column: ", col, ". Score: ", newScore)
             if newScore > bestScore:
@@ -54,7 +55,7 @@ def minimax_alphabeta(board, moveCount, depth, alpha, beta, maximizingPlayer):
         bestScore = math.inf
         for col in valid_columns:
             boardCopy = board.copy()
-            add_token(boardCopy, col, PLAYER)
+            add_token(boardCopy, col, settings.PLAYER)
             newScore = minimax_alphabeta(boardCopy, moveCount + 1, depth - 1, alpha, beta, True)[1]
             print("Minimizing. Column: ", col, ". Score: ", newScore)
             if newScore < bestScore:

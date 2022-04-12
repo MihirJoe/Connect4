@@ -1,20 +1,14 @@
 import numpy as np
 import pandas as pd
 import time
-
-ROWS = 6
-COLS = 7
-WIN_LENGTH = 4
+import settings
+import subfile
 
 TOP_ROW = 0
 
-EMPTY = 0
-PLAYER = 1
-AI = 2
-
 # Creates board as numpy matrix.
 def create_board_matrix():
-    board = np.zeros(ROWS, COLS)
+    board = np.zeros(settings.ROWS, settings.COLS)
 
 # Create board as bitmap??
 def create_board_bitmap():
@@ -22,27 +16,27 @@ def create_board_bitmap():
 
 # Create board as pandas dataframe.
 def create_board_df():
-    board = pd.DataFrame(EMPTY, index = range(ROWS), columns = range(COLS))
+    board = pd.DataFrame(settings.EMPTY, index = range(settings.ROWS), columns = range(settings.COLS))
     return board
 
 # Function to add a token to the board.
     # Will need to make sure it drops all the way to the lowest open row.
     # Assume the column is valid. We will make the if/else statement in the main loop.
 def add_token(board, column, token):
-    for row in range(ROWS):
-        if board.iat[row, column] == EMPTY:
+    for row in range(settings.ROWS):
+        if board.iat[row, column] == settings.EMPTY:
             lowest_row = row
     board.at[lowest_row, column] = token
 
 # Function to check whether a column is open.
 def is_valid_column(board, column):
-    return board.iat[TOP_ROW, column] == EMPTY
+    return board.iat[TOP_ROW, column] == settings.EMPTY
 
 # Function that returns all valid/open columns for a given board.
 def all_valid_columns(board):
     valid_columns = []
 
-    for col in range(COLS):
+    for col in range(settings.COLS):
         if is_valid_column(board, col):
             valid_columns.append(col)
 
@@ -51,28 +45,28 @@ def all_valid_columns(board):
 # Check if current board has a win (WIN_LENGTH consecutive tokens) for a given token.
 def is_win(board, token):
     # Check horizontal directions.
-    for row in range(ROWS):
-        for col in range(COLS - (WIN_LENGTH - 1)):
-            if all(board.iat[row, col+i] == token for i in range(WIN_LENGTH)):
+    for row in range(settings.ROWS):
+        for col in range(settings.COLS - (settings.WIN_LENGTH - 1)):
+            if all(board.iat[row, col+i] == token for i in range(settings.WIN_LENGTH)):
                 return True
 
     # Check vertical directions.
-    for row in range(ROWS - (WIN_LENGTH - 1)):
-        for col in range(COLS):
-            if all(board.iat[row+i, col] == token for i in range(WIN_LENGTH)):
+    for row in range(settings.ROWS - (settings.WIN_LENGTH - 1)):
+        for col in range(settings.COLS):
+            if all(board.iat[row+i, col] == token for i in range(settings.WIN_LENGTH)):
                 return True
 
     # Check positive slopes.
-    for row in range((WIN_LENGTH - 1), ROWS):
-        for col in range(COLS - (WIN_LENGTH - 1)):
-            if all(board.iat[row-i,col+i] == token for i in range(WIN_LENGTH)):
+    for row in range((settings.WIN_LENGTH - 1), settings.ROWS):
+        for col in range(settings.COLS - (settings.WIN_LENGTH - 1)):
+            if all(board.iat[row-i,col+i] == token for i in range(settings.WIN_LENGTH)):
                 return True
 
 
     # Check negative slopes.
-    for row in range(ROWS - (WIN_LENGTH - 1)):
-        for col in range(COLS - (WIN_LENGTH - 1)):
-            if all(board.iat[row+i, col+i] == token for i in range(WIN_LENGTH)):
+    for row in range(settings.ROWS - (settings.WIN_LENGTH - 1)):
+        for col in range(settings.COLS - (settings.WIN_LENGTH - 1)):
+            if all(board.iat[row+i, col+i] == token for i in range(settings.WIN_LENGTH)):
                 return True
 
     return False
@@ -83,20 +77,20 @@ def is_win(board, token):
     # Assuming WIN_LENGTH >= 4.
 def score_line(line, token):
     score = 0
-    oppToken = PLAYER
-    if token == PLAYER: oppToken = AI
+    oppToken = settings.PLAYER
+    if token == settings.PLAYER: oppToken = settings.AI
 
-    if line.count(token) == WIN_LENGTH:
+    if line.count(token) == settings.WIN_LENGTH:
         return 1000
-    if line.count(oppToken) == WIN_LENGTH:
+    if line.count(oppToken) == settings.WIN_LENGTH:
         return -1000
     
     # Line scoring method for multiple WIN_LENGTH possibilities.
-    for i in range(2, WIN_LENGTH):
-        if line.count(token) == i and line.count(EMPTY) == (WIN_LENGTH - i):
+    for i in range(2, settings.WIN_LENGTH):
+        if line.count(token) == i and line.count(settings.EMPTY) == (settings.WIN_LENGTH - i):
             score += 2*i*i
 
-    if line.count(oppToken) == (WIN_LENGTH - 1) and line.count(EMPTY) == 1:
+    if line.count(oppToken) == (settings.WIN_LENGTH - 1) and line.count(settings.EMPTY) == 1:
         score -= 18
 
     return score
@@ -107,38 +101,38 @@ def score_board(board, token):
     score = 0
 
     # Extra score for center column?
-    centerCol = list(board.iloc[:, int((COLS - 1)/2)])
+    centerCol = list(board.iloc[:, int((settings.COLS - 1)/2)])
     score += 3 * centerCol.count(token)
 
     # Score horizontals.
-    for row in range(ROWS):
+    for row in range(settings.ROWS):
         rowLine = list(board.iloc[row, :])
-        for col in range(COLS - (WIN_LENGTH - 1)):
-            lineSection = rowLine[col: col + WIN_LENGTH]
+        for col in range(settings.COLS - (settings.WIN_LENGTH - 1)):
+            lineSection = rowLine[col: col + settings.WIN_LENGTH]
             score += score_line(lineSection, token)
 
     # Score verticals.
-    for col in range(COLS):
+    for col in range(settings.COLS):
         colLine = list(board.iloc[:, col])
-        for row in range(ROWS - (WIN_LENGTH - 1)):
-            lineSection = colLine[row: row + WIN_LENGTH]
+        for row in range(settings.ROWS - (settings.WIN_LENGTH - 1)):
+            lineSection = colLine[row: row + settings.WIN_LENGTH]
             score += score_line(lineSection, token)
 
     # Score positive diagonals.
-    for row in range(ROWS - (WIN_LENGTH - 1)):
-        for col in range(COLS - (WIN_LENGTH - 1)):
-            lineSection = list(board.iloc[row+i, col+i] for i in range(WIN_LENGTH))
+    for row in range(settings.ROWS - (settings.WIN_LENGTH - 1)):
+        for col in range(settings.COLS - (settings.WIN_LENGTH - 1)):
+            lineSection = list(board.iloc[row+i, col+i] for i in range(settings.WIN_LENGTH))
             score += score_line(lineSection, token)
 
     # Score negative diagonals.
-    for row in range(ROWS - (WIN_LENGTH - 1)):
-        for col in range(COLS - (WIN_LENGTH - 1)):
-            lineSection = list(board.iloc[row+(WIN_LENGTH - 1)-i, col+i] for i in range(WIN_LENGTH))
+    for row in range(settings.ROWS - (settings.WIN_LENGTH - 1)):
+        for col in range(settings.COLS - (settings.WIN_LENGTH - 1)):
+            lineSection = list(board.iloc[row+(settings.WIN_LENGTH - 1)-i, col+i] for i in range(settings.WIN_LENGTH))
             score += score_line(lineSection, token)
 
     return score
 
 # Function to check whether a board has a win or is full.
 def is_end_node(board):
-    return is_win(board, AI) or is_win(board, PLAYER) or (len(all_valid_columns(board)) == 0)
+    return is_win(board, settings.AI) or is_win(board, settings.PLAYER) or (len(all_valid_columns(board)) == 0)
 
