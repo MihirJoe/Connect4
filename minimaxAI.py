@@ -6,14 +6,12 @@ from board import *
 # Create non-minimax methods for AI decision making? 
     # Compare these methods to minimax with alpha-beta.
 
-# NEED TO TEST THIS ON SIMPLER THINGS!! I THINK I NEED TO UPDATE THE  SCORE FUNCTION.
 def minimax_alphabeta(board, moveCount, depth, alpha, beta, maximizingPlayer):
     valid_columns = all_valid_columns(board)
     random.shuffle(valid_columns)
 
     # Setup to leave recursion if at depth limit or if the board contains a win.
     if depth == 0:
-        print("Depth Reached. Current Board Score: ", score_board(board, AI), ". Number Moves: ", moveCount)
         return None, score_board(board, AI)
     if is_end_node(board):
         if is_win(board, AI):
@@ -35,7 +33,6 @@ def minimax_alphabeta(board, moveCount, depth, alpha, beta, maximizingPlayer):
             boardCopy = board.copy()
             add_token(boardCopy, col, AI)
             newScore = minimax_alphabeta(boardCopy, moveCount + 1, depth - 1, alpha, beta, False)[1]
-            print("Maximizing. Column: ", col, ". Score: ", newScore)
             if newScore > bestScore:
                 bestScore = newScore
                 column = col
@@ -56,7 +53,6 @@ def minimax_alphabeta(board, moveCount, depth, alpha, beta, maximizingPlayer):
             boardCopy = board.copy()
             add_token(boardCopy, col, PLAYER)
             newScore = minimax_alphabeta(boardCopy, moveCount + 1, depth - 1, alpha, beta, True)[1]
-            print("Minimizing. Column: ", col, ". Score: ", newScore)
             if newScore < bestScore:
                 bestScore = newScore
                 column = col
@@ -64,6 +60,3 @@ def minimax_alphabeta(board, moveCount, depth, alpha, beta, maximizingPlayer):
             if alpha >= beta:
                 break
         return column, bestScore
-
-
-# Testing.
