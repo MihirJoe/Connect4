@@ -11,12 +11,6 @@ from subfile import *
 # Initializing global variables in settings.py
 initialize_vars(6, 7, 4, 0, 1, 2, 0, 1, 100, int(100/2 -5))
 
-# Need setup for the board.
-    # Create board.
-    # Get difficulty level / depth of AI search.
-    # Get the number of rows and columns from the user? Or will we manually set those.
-    # Randomize the initial starter.
-
 def get_depth_pygame():
     # prompt the user to select the difficulty level
         # 1 corresponds to shallowest minimax search

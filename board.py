@@ -10,8 +10,6 @@ def create_board_df():
     return board
 
 # Function to add a token to the board.
-    # Will need to make sure it drops all the way to the lowest open row.
-    # Assume the column is valid. We will make the if/else statement in the main loop.
 def add_token(board, column, token):
     for row in range(settings.ROWS):
         if board.iat[row, column] == settings.EMPTY:
@@ -64,8 +62,6 @@ def is_win(board, token):
 
 # Given a line (which will be of length WIN_LENGTH) and a token to check.
     # Will return the calculated score for the PLAYER/AI for that line.
-    # Not sure how well it will work as the size of WIN_LENGTH increases.
-    # Assuming WIN_LENGTH >= 4.
 def score_line(line, token):
     score = 0
     oppToken = settings.PLAYER
@@ -92,7 +88,7 @@ def score_line(line, token):
 def score_board(board, token):
     score = 0
 
-    # Extra score for center column?
+    # Extra score for center column.
     centerCol = list(board.iloc[:, int((settings.COLS - 1)/2)])
     score += 3 * centerCol.count(token)
 
