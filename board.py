@@ -16,16 +16,17 @@ def add_token(board, column, token):
     for row in range(settings.ROWS):
         if board.iat[row, column] == settings.EMPTY:
             lowest_row = row
-    board.at[lowest_row, column] = token
+    board.at[lowest_row, column] = token # insert token at the lowest open row in column
 
 # Function to check whether a column is open.
+    # open as long as at least an empty spot in the top row.
 def is_valid_column(board, column):
-    return board.iat[TOP_ROW, column] == settings.EMPTY
+    return board.iat[TOP_ROW, column] == settings.EMPTY 
 
 # Function that returns all valid/open columns for a given board.
 def all_valid_columns(board):
     valid_columns = []
-
+    # loop through columns and check validity
     for col in range(settings.COLS):
         if is_valid_column(board, col):
             valid_columns.append(col)
@@ -70,6 +71,7 @@ def score_line(line, token):
     oppToken = settings.PLAYER
     if token == settings.PLAYER: oppToken = settings.AI
 
+    # win is worth 1000
     if line.count(token) == settings.WIN_LENGTH:
         return 1000
     if line.count(oppToken) == settings.WIN_LENGTH:
