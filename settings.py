@@ -1,18 +1,20 @@
+from numpy import row_stack
+
+#from board import AI, COLS, EMPTY, PLAYER, ROWS, WIN_LENGTH
+#from gameplay import AI_TURN, PLAYER_TURN, RADIUS, SCREEN_HEIGHT, SCREEN_SIZE, SCREEN_WIDTH, SQUARE_SIDE
+
+
 def init():
-    ROWS = 6
-    COLS = 7
-    WIN_LENGTH = 4
-
-    EMPTY = 0
-    PLAYER = 1
-    AI = 2
-
-    PLAYER_TURN = 0
-    AI_TURN = 1
-
-    SQUARE_SIDE = 100
-    RADIUS = int(SQUARE_SIDE/2 - 5)
-    SCREEN_WIDTH = COLS * SQUARE_SIDE
-    SCREEN_HEIGHT = (ROWS + 1) * SQUARE_SIDE
-
-    SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
+    global ROWS
+    global COLS
+    global WIN_LENGTH
+    global EMPTY
+    global PLAYER
+    global AI
+    global PLAYER_TURN
+    global AI_TURN
+    global SQUARE_SIDE
+    global RADIUS
+    global SCREEN_WIDTH
+    global SCREEN_HEIGHT
+    global SCREEN_SIZE
