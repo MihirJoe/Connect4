@@ -22,7 +22,7 @@ def get_depth_pygame():
     pygame.display.update()
 
     # if value entered not between 1 and 5, prompt the user to choose again
-    remind = smallFont.render("Difficulty must be between 1 and 5. Choose again.", 1, 'blue')
+    remind = smallFont.render("Difficulty must be between 1 and 5. Choose again.", 1, 'red')
     
     needDepth = True
 
