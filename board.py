@@ -37,18 +37,21 @@ def is_win(board, token):
     for row in range(settings.ROWS):
         for col in range(settings.COLS - (settings.WIN_LENGTH - 1)):
             if all(board.iat[row, col+i] == token for i in range(settings.WIN_LENGTH)):
+                print("row win")
                 return True
 
     # Check vertical directions.
     for row in range(settings.ROWS - (settings.WIN_LENGTH - 1)):
         for col in range(settings.COLS):
             if all(board.iat[row+i, col] == token for i in range(settings.WIN_LENGTH)):
+                print("col win")
                 return True
 
     # Check positive slopes.
     for row in range((settings.WIN_LENGTH - 1), settings.ROWS):
         for col in range(settings.COLS - (settings.WIN_LENGTH - 1)):
             if all(board.iat[row-i,col+i] == token for i in range(settings.WIN_LENGTH)):
+                print("diagonal win")
                 return True
 
 
