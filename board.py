@@ -37,6 +37,7 @@ def is_win(board, token):
     for row in range(settings.ROWS):
         for col in range(settings.COLS - (settings.WIN_LENGTH - 1)):
             if all(board.iat[row, col+i] == token for i in range(settings.WIN_LENGTH)):
+                print("token ", token)
                 print("row win")
                 return True
 

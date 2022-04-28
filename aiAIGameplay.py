@@ -183,7 +183,7 @@ while not gameOver:
     if turn == settings.PLAYER_TURN and not gameOver:
         moveCount1 = AI_turn1(board, depth1, moveCount1) # call AI_turn to determine action and place token
         # if the AI won, display a message and end the game
-        if is_win(board, settings.PLAYER_TURN):
+        if is_win(board, settings.PLAYER):
             label = bigFont.render("AI One Wins!", 1, 'red')
             screen.blit(label, (40,10))
             gameOver = True  

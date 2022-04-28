@@ -81,7 +81,7 @@ def player_turn_pygame(board):
 # function to add a token on the AI's turn
 def AI_turn(board, depth, moveCount):
     # call function to determine where the AI should play
-    colSelection, score = minimax_alphabeta(board, moveCount, depth, -math.inf, math.inf, True)
+    colSelection, score = minimax_alphabeta(board, moveCount, depth, -math.inf, math.inf, True, settings.AI, settings.PLAYER)
 
     # add a token to the selected column
     if is_valid_column(board, colSelection):
