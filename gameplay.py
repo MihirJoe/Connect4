@@ -1,15 +1,25 @@
 from time import sleep
+from cv2 import *
+from numpy import *
 from board import *
 from minimaxAI import *
 import random
 import math
 import pygame
 import sys
+import time
+import pandas as pd
 from settings import *
 from subfile import *
+from matplotlib import pyplot as plt
 
 # Initializing global variables in settings.py
 initialize_vars(6, 7, 4, 0, 1, 2, 0, 1, 100, int(100/2 -5))
+
+timeTaken_minimax = []
+timeTaken_alphabeta = []
+predictedMove_minimax = []
+predictedMove_alphabeta = []
 
 def get_depth_pygame():
     # prompt the user to select the difficulty level
@@ -81,7 +91,27 @@ def player_turn_pygame(board):
 # function to add a token on the AI's turn
 def AI_turn(board, depth, moveCount):
     # call function to determine where the AI should play
+
+    # test regular minimax time
+    start = time.time()
+    colSelection, score = minimax(board, moveCount, depth, True)
+    end = time.time()
+
+    predictedMove_minimax.append(colSelection)
+    timeTaken_minimax.append(end-start)
+
+    #print('Move Count (minimax):', moveCount)
+
+    # test regular alpha beta pruning
+    start = time.time()
     colSelection, score = minimax_alphabeta(board, moveCount, depth, -math.inf, math.inf, True)
+    end = time.time()
+
+    predictedMove_alphabeta.append(colSelection)
+    timeTaken_alphabeta.append(end-start)
+    
+    #print('Move Count (alpha-beta):', moveCount)
+
 
     # add a token to the selected column
     if is_valid_column(board, colSelection):
@@ -172,7 +202,49 @@ while not gameOver:
         turn += 1
         turn = turn % 2
 
+
+def timeAnalysis(minimax, alphabeta):
+    
+    # Determine sample size (number of moves)
+    n = size(minimax)
+
+    # Display Statistics Summary
+    minimaxdf = pd.DataFrame(minimax, columns=['Minimax'])
+    alphabetadf = pd.DataFrame(alphabeta, columns=['Alpha-Beta'])
+    
+    print("Minimax mean:", minimaxdf.mean())
+    print("Minimax standard deviation:", minimaxdf.std())
+    print("Alpha-Beta mean:", alphabetadf.mean())
+    print("Alpha-Beta standard deviation:", alphabetadf.std())
+
+
+    # Create x axis data
+    x = np.zeros(n)
+
+    j = 1
+    for i in range(n):
+        x[i] = i + 1
+    
+    # Create Plot 
+    plt.scatter(x, minimax, label= "Minimax")
+    plt.scatter(x, alphabeta, label= "Alpha-Beta")
+    plt.legend()
+    plt.xlabel("Move Number")
+    plt.ylabel("Time (s)")
+    plt.title("Time vs Move Number")
+    plt.show()
+    
+
+
 # if the game is over pause on the winner message
-    if gameOver:
-        pygame.time.wait(3000)
+if gameOver:
+    #print('Move Count:', moveCount)
+
+    print("Minimax Times: ", timeTaken_minimax)
+    print("Alpha-Beta Times: ", timeTaken_alphabeta)
+    
+    # Call analysis function
+    timeAnalysis(timeTaken_minimax, timeTaken_alphabeta)
+
+    pygame.time.wait(3000)
 
